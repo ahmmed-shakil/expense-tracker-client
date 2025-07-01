@@ -197,6 +197,20 @@ export const authApi = {
     const response = await api.get("/auth/me");
     return response.data;
   },
+
+  forgotPassword: async (email: string): Promise<ApiResponse> => {
+    const response = await api.post("/auth/forgot-password", { email });
+    return response.data;
+  },
+
+  verifyOtpAndResetPassword: async (data: {
+    email: string;
+    otp: string;
+    newPassword: string;
+  }): Promise<ApiResponse> => {
+    const response = await api.post("/auth/verify-otp", data);
+    return response.data;
+  },
 };
 
 // User API

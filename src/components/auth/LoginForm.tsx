@@ -1,12 +1,22 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, Input, Button, Card, Typography, Alert, Space } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Card,
+  Typography,
+  Alert,
+  Space,
+  Modal,
+} from "antd";
 import {
   UserOutlined,
   LockOutlined,
   CreditCardOutlined,
 } from "@ant-design/icons";
 import { useAuth } from "../../contexts/AuthContext";
+import { ForgotPasswordModal } from "./ForgotPasswordModal";
 
 const { Title, Text } = Typography;
 
@@ -18,6 +28,7 @@ interface LoginFormValues {
 export const LoginForm: React.FC = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
@@ -120,6 +131,18 @@ export const LoginForm: React.FC = () => {
               Sign in
             </Button>
           </Form.Item>
+
+          <div style={{ textAlign: "center", marginBottom: 16 }}>
+            <Button
+              type="link"
+              onClick={() => setShowForgotPassword(true)}
+              style={{ padding: 0, height: "auto" }}
+            >
+              <Text type="secondary" underline>
+                Forgot your password?
+              </Text>
+            </Button>
+          </div>
         </Form>
 
         <div style={{ textAlign: "center", marginTop: 16 }}>
@@ -132,6 +155,11 @@ export const LoginForm: React.FC = () => {
             </Link>
           </Text>
         </div>
+
+        <ForgotPasswordModal
+          open={showForgotPassword}
+          onClose={() => setShowForgotPassword(false)}
+        />
       </Card>
     </div>
   );
