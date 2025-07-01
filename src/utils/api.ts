@@ -72,6 +72,26 @@ api.interceptors.response.use(
 
     // If error is 401 and we haven't already tried to refresh
     if (error.response?.status === 401 && !originalRequest._retry) {
+      // Special handling for refresh endpoint - if refresh fails, logout immediately
+      if (originalRequest.url?.includes("/auth/refresh")) {
+        console.log("Refresh token request failed - logging out");
+        isAuthInvalid = true;
+
+        // Clear any stored auth state
+        localStorage.removeItem("user");
+        sessionStorage.removeItem("user");
+
+        // Set global flag for AuthContext to check
+        (window as any).authInvalid = true;
+
+        // Dispatch logout event
+        window.dispatchEvent(new CustomEvent("auth:logout"));
+
+        return Promise.reject(
+          new Error("Refresh token invalid. Please login again.")
+        );
+      }
+
       if (isRefreshing) {
         // If we're already refreshing, queue this request
         return new Promise((resolve, reject) => {
@@ -113,6 +133,9 @@ api.interceptors.response.use(
         localStorage.removeItem("user");
         sessionStorage.removeItem("user");
 
+        // Set global flag for AuthContext to check
+        (window as any).authInvalid = true;
+
         // Dispatch logout event to notify AuthContext
         window.dispatchEvent(new CustomEvent("auth:logout"));
 
@@ -137,6 +160,7 @@ export const authApi = {
     isAuthInvalid = false;
     isRefreshing = false;
     failedQueue = [];
+    (window as any).authInvalid = false; // Clear global flag
   },
 
   register: async (

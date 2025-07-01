@@ -75,6 +75,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const checkAuth = async () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
+
+      // Check if auth is marked as invalid in the API layer
+      if ((window as any).authInvalid) {
+        console.log("Auth marked as invalid, skipping check");
+        dispatch({ type: "LOGOUT" });
+        return;
+      }
+
       const response = await authApi.me();
       if (response.success && response.data) {
         dispatch({ type: "SET_USER", payload: response.data });
@@ -91,6 +99,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
+      // Reset auth state before login
+      authApi.resetAuthState();
+
       const response = await authApi.login(email, password);
       if (response.success && response.data?.user) {
         dispatch({ type: "SET_USER", payload: response.data.user });
