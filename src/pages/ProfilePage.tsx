@@ -47,6 +47,28 @@ export const ProfilePage: React.FC = () => {
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
   const [profileImage, setProfileImage] = useState<string>(user?.avatar || "");
+  const [profileData, setProfileData] = useState<any>(null);
+
+  useEffect(() => {
+    const loadProfileData = async () => {
+      try {
+        const response = await userApi.getProfile();
+        if (response.success && response.data && response.data.user) {
+          setProfileData(response.data.user);
+          profileForm.setFieldsValue({
+            name: response.data.user.name,
+            email: response.data.user.email,
+          });
+          setProfileImage(response.data.user.avatar || "");
+        }
+      } catch (error) {
+        console.error("Failed to fetch profile data:", error);
+        toast.error("Failed to load profile data");
+      }
+    };
+
+    loadProfileData();
+  }, [profileForm]);
 
   useEffect(() => {
     if (user) {
@@ -58,21 +80,40 @@ export const ProfilePage: React.FC = () => {
     }
   }, [user, profileForm]);
 
+  // Format member since date
+  const formatMemberSince = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch (error) {
+      return "N/A";
+    }
+  };
+
   const uploadToCloudinary = async (file: File): Promise<string> => {
+    const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
+
+    console.log("Cloudinary Config:", { cloudName, uploadPreset });
+
+    if (!cloudName || !uploadPreset) {
+      throw new Error(
+        "Cloudinary configuration is missing. Please check your environment variables."
+      );
+    }
+
     const formData = new FormData();
     formData.append("file", file);
-    formData.append(
-      "upload_preset",
-      process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET || "ml_default"
-    );
-    formData.append(
-      "cloud_name",
-      process.env.REACT_APP_CLOUDINARY_CLOUD_NAME || ""
-    );
+    formData.append("upload_preset", uploadPreset);
+    formData.append("cloud_name", cloudName);
 
     try {
       const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
         {
           method: "POST",
           body: formData,
@@ -80,7 +121,11 @@ export const ProfilePage: React.FC = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Upload failed");
+        const errorText = await response.text();
+        console.error("Cloudinary error response:", errorText);
+        throw new Error(
+          `Upload failed: ${response.status} ${response.statusText}`
+        );
       }
 
       const data = await response.json();
@@ -127,7 +172,10 @@ export const ProfilePage: React.FC = () => {
       });
 
       if (response.success && response.data) {
-        updateUser(response.data);
+        // Backend returns { user: ... } structure
+        const userData = response.data.user;
+        updateUser(userData);
+        setProfileData(userData);
         toast.success("Profile updated successfully!");
       }
     } catch (error: any) {
@@ -371,13 +419,20 @@ export const ProfilePage: React.FC = () => {
                     <Text strong>Member Since</Text>
                     <br />
                     <Text type="secondary">
-                      {user?.createdAt
-                        ? new Date(user.createdAt).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })
+                      {profileData?.createdAt
+                        ? formatMemberSince(profileData.createdAt)
+                        : user?.createdAt
+                        ? formatMemberSince(user.createdAt)
                         : "N/A"}
+                    </Text>
+                  </div>
+                </Col>
+                <Col xs={24} sm={12}>
+                  <div>
+                    <Text strong>Total Expenses</Text>
+                    <br />
+                    <Text type="secondary">
+                      {profileData?._count?.expenses || 0} expenses recorded
                     </Text>
                   </div>
                 </Col>

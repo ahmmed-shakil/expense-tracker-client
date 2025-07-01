@@ -201,7 +201,9 @@ export const authApi = {
 
 // User API
 export const userApi = {
-  getProfile: async (): Promise<ApiResponse<User>> => {
+  getProfile: async (): Promise<
+    ApiResponse<{ user: User & { _count?: { expenses: number } } }>
+  > => {
     const response = await api.get("/user/profile");
     return response.data;
   },
@@ -210,7 +212,7 @@ export const userApi = {
     name: string;
     email: string;
     avatar?: string;
-  }): Promise<ApiResponse<User>> => {
+  }): Promise<ApiResponse<{ user: User }>> => {
     const response = await api.put("/user/profile", data);
     return response.data;
   },

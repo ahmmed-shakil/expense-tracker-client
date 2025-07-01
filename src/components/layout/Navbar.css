@@ -96,10 +96,21 @@
   padding: 8px 12px !important;
   height: 48px !important;
   line-height: 32px !important;
+  border-radius: 6px !important;
+  margin: 0 2px !important;
 }
 
 .ant-menu-horizontal .ant-menu-item-selected {
   padding: 8px 12px !important;
   height: 48px !important;
   line-height: 32px !important;
+  border-radius: 6px !important;
+  margin: 0 2px !important;
+  background-color: #1890ff !important;
+  color: #ffffff !important;
+}
+
+.ant-menu-horizontal .ant-menu-item:hover {
+  border-radius: 6px !important;
+  background-color: rgba(24, 144, 255, 0.1) !important;
 }
