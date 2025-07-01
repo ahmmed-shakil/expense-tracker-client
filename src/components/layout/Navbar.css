@@ -1,0 +1,92 @@
+/* Navbar responsive styles */
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none !important;
+  }
+  .desktop-user-menu {
+    display: none !important;
+  }
+  .mobile-menu-button {
+    display: block !important;
+  }
+
+  /* Adjust navbar padding for mobile */
+  .navbar-container {
+    padding: 0 12px !important;
+  }
+
+  /* Logo text responsive */
+  .logo-text {
+    display: none !important;
+  }
+
+  /* Hide user name on very small screens */
+  .user-name {
+    display: none !important;
+  }
+}
+
+/* Small tablets */
+@media (min-width: 481px) and (max-width: 768px) {
+  .navbar-container {
+    padding: 0 16px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-menu-button {
+    display: none !important;
+  }
+
+  .logo-text {
+    display: inline !important;
+  }
+
+  .user-name {
+    display: inline !important;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .navbar-container {
+    padding: 0 16px !important;
+  }
+
+  .desktop-menu .ant-menu {
+    min-width: 400px !important;
+  }
+
+  .desktop-menu .ant-menu-item {
+    padding: 0 12px !important;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 1025px) {
+  .navbar-container {
+    padding: 0 24px !important;
+  }
+}
+
+/* Additional responsive adjustments */
+@media (max-width: 480px) {
+  .navbar-container {
+    padding: 0 8px !important;
+  }
+
+  /* Make logo smaller on very small screens */
+  .navbar-container .anticon {
+    font-size: 20px !important;
+  }
+}
+
+/* Ensure menu items are properly spaced */
+.desktop-menu .ant-menu-horizontal {
+  display: flex;
+  justify-content: center;
+}
+
+.desktop-menu .ant-menu-item {
+  margin: 0 4px;
+}
