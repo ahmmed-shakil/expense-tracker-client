@@ -10,7 +10,7 @@ export const useApiErrorHandler = () => {
     const responseInterceptor = api.interceptors.response.use(
       (response) => response,
       async (error) => {
-        console.error("API Error:", error.response?.data || error.message);
+        // console.error("API Error:", error.response?.data || error.message);
 
         // Handle specific errors that aren't 401 (401 is handled by the main interceptor)
         if (error.response?.status === 403) {
@@ -32,7 +32,7 @@ export const useApiErrorHandler = () => {
 
 // Utility function to handle API errors with specific messages
 export const handleApiError = (error: any, operation: string = "operation") => {
-  console.error(`Failed to ${operation}:`, error);
+  // console.error(`Failed to ${operation}:`, error);
 
   if (error.code === "ERR_NETWORK") {
     toast.error("Unable to connect to server. Please check your connection.");

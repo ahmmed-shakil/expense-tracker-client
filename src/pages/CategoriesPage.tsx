@@ -49,7 +49,7 @@ export const CategoriesPage: React.FC = () => {
     try {
       setLoading(true);
       const response = await api.get("/categories");
-      console.log("Categories API response:", response.data);
+      // console.log("Categories API response:", response.data);
       setCategories(response.data.data || []);
     } catch (error: any) {
       handleApiError(error, "fetch categories");

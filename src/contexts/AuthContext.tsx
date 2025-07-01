@@ -79,19 +79,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Check if auth is marked as invalid in the API layer
       if ((window as any).authInvalid) {
-        console.log("Auth marked as invalid, skipping check");
+        // console.log("Auth marked as invalid, skipping check");
         dispatch({ type: "LOGOUT" });
         return;
       }
 
       const response = await authApi.me();
       if (response.success && response.data) {
-        dispatch({ type: "SET_USER", payload: response.data });
+        // The backend returns { user } structure, so we need to access response.data.user
+        const userData = (response.data as any).user || response.data;
+        dispatch({ type: "SET_USER", payload: userData });
       } else {
         dispatch({ type: "LOGOUT" });
       }
     } catch (error: any) {
-      console.log("Auth check failed:", error.message);
+      // console.log("Auth check failed:", error.message);
       dispatch({ type: "LOGOUT" });
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
@@ -131,7 +133,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       await authApi.logout();
     } catch (error) {
-      console.error("Logout error:", error);
+      // console.error("Logout error:", error);
     } finally {
       dispatch({ type: "LOGOUT" });
     }
@@ -151,7 +153,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     // Listen for automatic logout events from API interceptor
     const handleAutoLogout = () => {
-      console.log("Auto logout triggered");
+      // console.log("Auto logout triggered");
       if (mounted) {
         dispatch({ type: "LOGOUT" });
       }

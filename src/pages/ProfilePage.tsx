@@ -54,21 +54,25 @@ export const ProfilePage: React.FC = () => {
       try {
         const response = await userApi.getProfile();
         if (response.success && response.data && response.data.user) {
-          setProfileData(response.data.user);
+          const userData = response.data.user;
+          setProfileData(userData);
           profileForm.setFieldsValue({
-            name: response.data.user.name,
-            email: response.data.user.email,
+            name: userData.name,
+            email: userData.email,
           });
-          setProfileImage(response.data.user.avatar || "");
+          setProfileImage(userData.avatar || "");
+
+          // Update the user context with fresh data
+          updateUser(userData);
         }
       } catch (error) {
-        console.error("Failed to fetch profile data:", error);
+        // console.error("Failed to fetch profile data:", error);
         toast.error("Failed to load profile data");
       }
     };
 
     loadProfileData();
-  }, [profileForm]);
+  }, [profileForm, updateUser]);
 
   useEffect(() => {
     if (user) {
@@ -98,7 +102,7 @@ export const ProfilePage: React.FC = () => {
     const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
     const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
 
-    console.log("Cloudinary Config:", { cloudName, uploadPreset });
+    // console.log("Cloudinary Config:", { cloudName, uploadPreset });
 
     if (!cloudName || !uploadPreset) {
       throw new Error(
@@ -121,8 +125,8 @@ export const ProfilePage: React.FC = () => {
       );
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Cloudinary error response:", errorText);
+        // const errorText = await response.text();
+        // console.error("Cloudinary error response:", errorText);
         throw new Error(
           `Upload failed: ${response.status} ${response.statusText}`
         );
@@ -131,7 +135,7 @@ export const ProfilePage: React.FC = () => {
       const data = await response.json();
       return data.secure_url;
     } catch (error) {
-      console.error("Cloudinary upload error:", error);
+      // console.error("Cloudinary upload error:", error);
       throw new Error("Failed to upload image");
     }
   };
@@ -144,7 +148,7 @@ export const ProfilePage: React.FC = () => {
 
       // Get current form values to update profile with new image
       const currentValues = profileForm.getFieldsValue();
-      
+
       // Update profile with new image
       await userApi.updateProfile({
         name: currentValues.name || user?.name || "",
@@ -159,8 +163,8 @@ export const ProfilePage: React.FC = () => {
 
       toast.success("Profile image updated successfully!");
     } catch (error: any) {
-      console.error("Image upload error:", error);
-      
+      // console.error("Image upload error:", error);
+
       // Handle specific validation errors
       if (error.response?.data?.errors) {
         const errors = error.response.data.errors;

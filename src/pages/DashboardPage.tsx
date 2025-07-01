@@ -134,7 +134,7 @@ export const DashboardPage: React.FC = () => {
       const totalExpenseAmount = stats?.totalStats.totalAmount || 0;
       setNetSavings(totalIncome - totalExpenseAmount);
     } catch (error: any) {
-      console.error("Failed to fetch dashboard data:", error);
+      // console.error("Failed to fetch dashboard data:", error);
       toast.error("Failed to fetch dashboard data");
     } finally {
       setLoading(false);
@@ -159,11 +159,6 @@ export const DashboardPage: React.FC = () => {
     }
 
     return {
-      title: {
-        text: "Income vs Expenses",
-        left: "center",
-        textStyle: { fontSize: 16, fontWeight: "bold" },
-      },
       tooltip: {
         trigger: "item",
         formatter: (params: any) => {
@@ -216,11 +211,6 @@ export const DashboardPage: React.FC = () => {
     }
 
     return {
-      title: {
-        text: "Expenses by Category",
-        left: "center",
-        textStyle: { fontSize: 16, fontWeight: "bold" },
-      },
       tooltip: {
         trigger: "axis",
         axisPointer: {
@@ -276,11 +266,6 @@ export const DashboardPage: React.FC = () => {
     }
 
     return {
-      title: {
-        text: "Budget vs Actual Spending",
-        left: "center",
-        textStyle: { fontSize: 16, fontWeight: "bold" },
-      },
       tooltip: {
         trigger: "axis",
         formatter: (params: any) => {
@@ -296,13 +281,11 @@ export const DashboardPage: React.FC = () => {
                   )}`;
         },
       },
-      legend: {
-        bottom: "0%",
-        left: "center",
-      },
       xAxis: {
         type: "category",
-        data: budgets.map((budget) => budget.name),
+        data: budgets.map((budget) =>
+          budget.category ? budget.category.name : budget.name
+        ),
         axisLabel: {
           rotate: 45,
           interval: 0,
@@ -342,11 +325,6 @@ export const DashboardPage: React.FC = () => {
     }
 
     return {
-      title: {
-        text: "Monthly Expense Trend",
-        left: "center",
-        textStyle: { fontSize: 16, fontWeight: "bold" },
-      },
       tooltip: {
         trigger: "axis",
         formatter: (params: any) => {
@@ -666,7 +644,7 @@ export const DashboardPage: React.FC = () => {
         {/* Charts */}
         <Row gutter={[16, 16]}>
           <Col xs={24} lg={12}>
-            <Card title="Income vs Expenses">
+            <Card>
               <ReactECharts
                 option={getIncomeVsExpenseChart()}
                 style={{ height: "300px" }}
@@ -674,7 +652,7 @@ export const DashboardPage: React.FC = () => {
             </Card>
           </Col>
           <Col xs={24} lg={12}>
-            <Card title="Expenses by Category">
+            <Card>
               <ReactECharts
                 option={getCategoryExpenseChart()}
                 style={{ height: "300px" }}
@@ -682,7 +660,7 @@ export const DashboardPage: React.FC = () => {
             </Card>
           </Col>
           <Col xs={24} lg={12}>
-            <Card title="Budget vs Actual">
+            <Card>
               <ReactECharts
                 option={getBudgetProgressChart()}
                 style={{ height: "300px" }}
@@ -690,7 +668,7 @@ export const DashboardPage: React.FC = () => {
             </Card>
           </Col>
           <Col xs={24} lg={12}>
-            <Card title="Monthly Trend">
+            <Card>
               <ReactECharts
                 option={getMonthlyTrendChart()}
                 style={{ height: "300px" }}

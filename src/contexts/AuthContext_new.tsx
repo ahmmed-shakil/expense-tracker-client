@@ -116,7 +116,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       await authApi.logout();
     } catch (error) {
-      console.error("Logout error:", error);
+      // console.error("Logout error:", error);
     } finally {
       dispatch({ type: "LOGOUT" });
     }

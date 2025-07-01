@@ -45,9 +45,9 @@ const processQueue = (error: any, token: string | null = null) => {
 // Request interceptor for logging
 api.interceptors.request.use(
   (config) => {
-    console.log(
-      `Making ${config.method?.toUpperCase()} request to ${config.url}`
-    );
+    // console.log(
+    //   `Making ${config.method?.toUpperCase()} request to ${config.url}`
+    // );
     return config;
   },
   (error) => {
@@ -74,7 +74,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       // Special handling for refresh endpoint - if refresh fails, logout immediately
       if (originalRequest.url?.includes("/auth/refresh")) {
-        console.log("Refresh token request failed - logging out");
+        // console.log("Refresh token request failed - logging out");
         isAuthInvalid = true;
 
         // Clear any stored auth state
@@ -110,7 +110,7 @@ api.interceptors.response.use(
 
       try {
         // Attempt to refresh the token
-        console.log("Making POST request to /auth/refresh");
+        // console.log("Making POST request to /auth/refresh");
         const response = await api.post("/auth/refresh");
 
         if (response.data.success) {
@@ -123,10 +123,10 @@ api.interceptors.response.use(
         // Refresh failed, mark auth as invalid to prevent further attempts
         isAuthInvalid = true;
 
-        console.log(
-          "Refresh token failed:",
-          refreshError.response?.data?.message || refreshError.message
-        );
+        // console.log(
+        //   "Refresh token failed:",
+        //   refreshError.response?.data?.message || refreshError.message
+        // );
         processQueue(refreshError, null);
 
         // Clear any stored auth state and trigger logout
@@ -148,7 +148,7 @@ api.interceptors.response.use(
       }
     }
 
-    console.error("API Error:", error.response?.data || error.message);
+    // console.error("API Error:", error.response?.data || error.message);
     return Promise.reject(error);
   }
 );
@@ -193,7 +193,7 @@ export const authApi = {
     return response.data;
   },
 
-  me: async (): Promise<ApiResponse<User>> => {
+  me: async (): Promise<ApiResponse<{ user: User }>> => {
     const response = await api.get("/auth/me");
     return response.data;
   },

@@ -70,14 +70,14 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
         if (response.success && response.data && Array.isArray(response.data)) {
           setCategories(response.data);
         } else {
-          console.warn(
-            "Categories response is not in expected format:",
-            response
-          );
+          // console.warn(
+          //   "Categories response is not in expected format:",
+          //   response
+          // );
           setCategories([]);
         }
       } catch (error) {
-        console.error("Failed to fetch categories:", error);
+        // console.error("Failed to fetch categories:", error);
         setCategories([]); // Ensure categories is always an array
       }
     };
