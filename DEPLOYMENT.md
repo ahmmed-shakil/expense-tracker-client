@@ -17,6 +17,22 @@ REACT_APP_API_URL=https://your-actual-backend-domain.onrender.com/api
 3. **Build Command**: `npm run build`
 4. **Start Command**: `serve -s build`
 
+## SPA Routing Fix for Render
+
+To fix the refresh/direct URL issue with React Router on Render, the project includes:
+
+1. **`_redirects` file**: Located in `public/_redirects` with content:
+
+   ```
+   /*    /index.html   200
+   ```
+
+2. **`404.html` file**: Located in `public/404.html` for fallback redirection
+
+3. **`render.yaml`**: Optional configuration file for advanced Render settings
+
+These files ensure that when users refresh the page or navigate directly to routes like `/dashboard`, the app will still work correctly.
+
 ## Auto-Deploy Configuration
 
 The project is configured to automatically build and deploy when you push to your main branch.
