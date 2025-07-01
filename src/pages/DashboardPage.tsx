@@ -28,7 +28,7 @@ import { toast } from "sonner";
 import { ExpenseStats } from "../types";
 import { expensesApi, incomeApi, api } from "../utils/api";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { RangePicker } = DatePicker;
 
 interface Income {
@@ -148,6 +148,15 @@ export const DashboardPage: React.FC = () => {
   // Chart configurations
   const getIncomeVsExpenseChart = () => {
     const totalExpenses = stats?.totalStats.totalAmount || 0;
+
+    if (totalIncome === 0 && totalExpenses === 0) {
+      return {
+        title: {
+          text: "No income or expense data available",
+          left: "center",
+        },
+      };
+    }
 
     return {
       title: {
@@ -537,50 +546,62 @@ export const DashboardPage: React.FC = () => {
         <Row gutter={[16, 16]} style={{ marginBottom: "24px" }}>
           <Col span={24}>
             <Card title="Budget Progress Overview">
-              <Row gutter={[16, 16]}>
-                {budgets.slice(0, 4).map((budget) => {
-                  const percentage =
-                    budget.amount > 0
-                      ? (budget.spent / budget.amount) * 100
-                      : 0;
-                  const status =
-                    percentage > 100
-                      ? "exception"
-                      : percentage > 80
-                      ? "active"
-                      : "success";
+              {budgets.length === 0 ? (
+                <div
+                  style={{
+                    textAlign: "center",
+                    padding: "40px 20px",
+                    color: "#999",
+                  }}
+                >
+                  <Text type="secondary">No budget data available</Text>
+                </div>
+              ) : (
+                <Row gutter={[16, 16]}>
+                  {budgets.slice(0, 4).map((budget) => {
+                    const percentage =
+                      budget.amount > 0
+                        ? (budget.spent / budget.amount) * 100
+                        : 0;
+                    const status =
+                      percentage > 100
+                        ? "exception"
+                        : percentage > 80
+                        ? "active"
+                        : "success";
 
-                  return (
-                    <Col xs={24} sm={12} lg={6} key={budget.id}>
-                      <Card size="small">
-                        <div style={{ marginBottom: "8px" }}>
-                          <strong>{budget.name}</strong>
-                          {budget.category && (
-                            <Tag style={{ marginLeft: "8px" }}>
-                              {budget.category.name}
-                            </Tag>
-                          )}
-                        </div>
-                        <Progress
-                          percent={Math.min(percentage, 100)}
-                          status={status}
-                          format={() => `${percentage.toFixed(1)}%`}
-                        />
-                        <div
-                          style={{
-                            marginTop: "8px",
-                            fontSize: "12px",
-                            color: "#666",
-                          }}
-                        >
-                          ${budget.spent.toFixed(2)} / $
-                          {budget.amount.toFixed(2)}
-                        </div>
-                      </Card>
-                    </Col>
-                  );
-                })}
-              </Row>
+                    return (
+                      <Col xs={24} sm={12} lg={6} key={budget.id}>
+                        <Card size="small">
+                          <div style={{ marginBottom: "8px" }}>
+                            <strong>{budget.name}</strong>
+                            {budget.category && (
+                              <Tag style={{ marginLeft: "8px" }}>
+                                {budget.category.name}
+                              </Tag>
+                            )}
+                          </div>
+                          <Progress
+                            percent={Math.min(percentage, 100)}
+                            status={status}
+                            format={() => `${percentage.toFixed(1)}%`}
+                          />
+                          <div
+                            style={{
+                              marginTop: "8px",
+                              fontSize: "12px",
+                              color: "#666",
+                            }}
+                          >
+                            ${budget.spent.toFixed(2)} / $
+                            {budget.amount.toFixed(2)}
+                          </div>
+                        </Card>
+                      </Col>
+                    );
+                  })}
+                </Row>
+              )}
             </Card>
           </Col>
         </Row>
