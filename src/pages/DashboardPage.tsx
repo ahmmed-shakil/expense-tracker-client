@@ -418,7 +418,64 @@ export const DashboardPage: React.FC = () => {
     return (
       <Layout>
         <div style={{ padding: "24px" }}>
-          <Skeleton active />
+          {/* Header Skeleton */}
+          <Row
+            justify="space-between"
+            align="middle"
+            style={{ marginBottom: "24px" }}
+          >
+            <Col>
+              <Skeleton.Input style={{ width: 250, height: 32 }} active />
+            </Col>
+            <Col>
+              <Space>
+                <Skeleton.Input style={{ width: 200, height: 32 }} active />
+                <Skeleton.Button style={{ width: 100 }} active />
+              </Space>
+            </Col>
+          </Row>
+
+          {/* Key Metrics Cards Skeleton */}
+          <Row gutter={[16, 16]} style={{ marginBottom: "24px" }}>
+            {[1, 2, 3, 4].map((i) => (
+              <Col xs={24} sm={12} lg={6} key={i}>
+                <Card style={{ height: "120px" }}>
+                  <Skeleton active paragraph={{ rows: 2 }} />
+                </Card>
+              </Col>
+            ))}
+          </Row>
+
+          {/* Budget Progress Skeleton */}
+          <Row gutter={[16, 16]} style={{ marginBottom: "24px" }}>
+            <Col span={24}>
+              <Card title={<Skeleton.Input style={{ width: 200 }} active />}>
+                <Row gutter={[16, 16]}>
+                  {[1, 2, 3, 4].map((i) => (
+                    <Col xs={24} sm={12} lg={6} key={i}>
+                      <Card size="small">
+                        <Skeleton active paragraph={{ rows: 3 }} />
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              </Card>
+            </Col>
+          </Row>
+
+          {/* Charts Skeleton */}
+          <Row gutter={[16, 16]}>
+            {[1, 2, 3, 4].map((i) => (
+              <Col xs={24} lg={12} key={i}>
+                <Card title={<Skeleton.Input style={{ width: 150 }} active />}>
+                  <Skeleton.Image
+                    style={{ width: "100%", height: "300px" }}
+                    active
+                  />
+                </Card>
+              </Col>
+            ))}
+          </Row>
         </div>
       </Layout>
     );

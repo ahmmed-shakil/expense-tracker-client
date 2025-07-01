@@ -50,15 +50,14 @@ export const RegisterForm: React.FC = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         padding: "20px",
+        backgroundColor: "#000000", // Dark background
       }}
     >
       <Card
         style={{
           width: "100%",
           maxWidth: 400,
-          boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
         }}
       >
         <div style={{ textAlign: "center", marginBottom: 32 }}>

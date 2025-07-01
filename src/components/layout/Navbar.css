@@ -90,3 +90,16 @@
 .desktop-menu .ant-menu-item {
   margin: 0 4px;
 }
+
+/* Custom styling for navbar menu items to reduce padding */
+.ant-menu-horizontal .ant-menu-item {
+  padding: 8px 16px !important;
+  height: 48px !important;
+  line-height: 32px !important;
+}
+
+.ant-menu-horizontal .ant-menu-item-selected {
+  padding: 8px 16px !important;
+  height: 48px !important;
+  line-height: 32px !important;
+}

@@ -10,7 +10,7 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <AntLayout>
+    <AntLayout style={{ minHeight: "100vh" }}>
       <Navbar />
       <Content className="expense-tracker-content">
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>{children}</div>

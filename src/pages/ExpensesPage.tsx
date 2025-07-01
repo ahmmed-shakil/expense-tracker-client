@@ -158,6 +158,7 @@ export const ExpensesPage: React.FC = () => {
       title: "Date",
       dataIndex: "date",
       key: "date",
+      width: 120,
       render: (date: string) => dayjs(date).format("MMM DD, YYYY"),
       sorter: (a: Expense, b: Expense) =>
         dayjs(a.date).unix() - dayjs(b.date).unix(),
@@ -166,11 +167,14 @@ export const ExpensesPage: React.FC = () => {
       title: "Description",
       dataIndex: "description",
       key: "description",
+      width: 200,
+      ellipsis: true,
     },
     {
       title: "Category",
       dataIndex: "categoryId",
       key: "category",
+      width: 120,
       render: (categoryId: string) => (
         <Tag color="blue">{getCategoryName(categoryId)}</Tag>
       ),
@@ -179,6 +183,7 @@ export const ExpensesPage: React.FC = () => {
       title: "Amount",
       dataIndex: "amount",
       key: "amount",
+      width: 100,
       render: (amount: number) => (
         <span style={{ color: "#ff4d4f", fontWeight: "bold" }}>
           -${amount.toFixed(2)}
@@ -189,6 +194,8 @@ export const ExpensesPage: React.FC = () => {
     {
       title: "Actions",
       key: "actions",
+      width: 120,
+      fixed: "right" as const,
       render: (_: any, record: Expense) => (
         <Space>
           <Button
@@ -311,6 +318,7 @@ export const ExpensesPage: React.FC = () => {
             dataSource={expenses}
             rowKey="id"
             loading={loading}
+            scroll={{ x: 800 }}
             pagination={{
               pageSize: 10,
               showSizeChanger: true,

@@ -131,6 +131,7 @@ export const IncomePage: React.FC = () => {
       title: "Date",
       dataIndex: "date",
       key: "date",
+      width: 120,
       render: (date: string) => dayjs(date).format("MMM DD, YYYY"),
       sorter: (a: Income, b: Income) =>
         dayjs(a.date).unix() - dayjs(b.date).unix(),
@@ -139,17 +140,21 @@ export const IncomePage: React.FC = () => {
       title: "Description",
       dataIndex: "description",
       key: "description",
+      width: 200,
+      ellipsis: true,
     },
     {
       title: "Source",
       dataIndex: "source",
       key: "source",
+      width: 120,
       render: (source: string) => <Tag color="blue">{source}</Tag>,
     },
     {
       title: "Amount",
       dataIndex: "amount",
       key: "amount",
+      width: 100,
       render: (amount: number) => (
         <span style={{ color: "#52c41a", fontWeight: "bold" }}>
           +${amount.toFixed(2)}
@@ -160,6 +165,8 @@ export const IncomePage: React.FC = () => {
     {
       title: "Actions",
       key: "actions",
+      width: 120,
+      fixed: "right" as const,
       render: (_: any, record: Income) => (
         <Space>
           <Button
@@ -267,6 +274,7 @@ export const IncomePage: React.FC = () => {
             dataSource={incomes}
             rowKey="id"
             loading={loading}
+            scroll={{ x: 800 }}
             pagination={{
               pageSize: 10,
               showSizeChanger: true,

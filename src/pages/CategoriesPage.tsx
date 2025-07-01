@@ -106,6 +106,7 @@ export const CategoriesPage: React.FC = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      width: 200,
       render: (name: string, record: Category) => (
         <Space>
           <div
@@ -125,6 +126,7 @@ export const CategoriesPage: React.FC = () => {
       title: "Color",
       dataIndex: "color",
       key: "color",
+      width: 100,
       render: (color: string) => (
         <Tag color={color} style={{ color: "#fff", border: "none" }}>
           {color}
@@ -134,6 +136,7 @@ export const CategoriesPage: React.FC = () => {
     {
       title: "Type",
       key: "type",
+      width: 100,
       render: (record: Category) => (
         <Tag color={record.userId ? "blue" : "green"}>
           {record.userId ? "Custom" : "Default"}
@@ -144,11 +147,14 @@ export const CategoriesPage: React.FC = () => {
       title: "Created",
       dataIndex: "createdAt",
       key: "createdAt",
+      width: 120,
       render: (date: string) => new Date(date).toLocaleDateString(),
     },
     {
       title: "Actions",
       key: "actions",
+      width: 120,
+      fixed: "right" as const,
       render: (record: Category) => (
         <Space>
           <Button
@@ -212,6 +218,7 @@ export const CategoriesPage: React.FC = () => {
             dataSource={categories}
             rowKey="id"
             loading={loading}
+            scroll={{ x: 600 }}
             pagination={{
               pageSize: 10,
               showSizeChanger: true,

@@ -61,8 +61,8 @@ export const Navbar: React.FC = () => {
   return (
     <Header
       style={{
-        background: "#fff",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+        background: "#141414",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
         padding: 0,
         position: "sticky",
         top: 0,
@@ -93,7 +93,7 @@ export const Navbar: React.FC = () => {
               <Text
                 strong
                 className="logo-text"
-                style={{ fontSize: "18px", color: "#001529" }}
+                style={{ fontSize: "18px", color: "#ffffff" }}
               >
                 ExpenseTracker
               </Text>
@@ -113,6 +113,7 @@ export const Navbar: React.FC = () => {
         >
           <Menu
             mode="horizontal"
+            theme="dark"
             selectedKeys={[location.pathname]}
             items={navigation.map((item) => ({
               key: item.key,
@@ -192,6 +193,7 @@ export const Navbar: React.FC = () => {
         {/* Navigation Menu */}
         <Menu
           mode="vertical"
+          theme="dark"
           selectedKeys={[location.pathname]}
           items={navigation.map((item) => ({
             key: item.key,
