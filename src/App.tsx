@@ -16,6 +16,7 @@ import {
   CategoriesPage,
   IncomePage,
   BudgetPage,
+  ProfilePage,
 } from "./pages";
 import { useApiErrorHandler } from "./utils/errorHandler";
 
@@ -67,6 +68,14 @@ const AppContent: React.FC = () => {
         element={
           <ProtectedRoute>
             <BudgetPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
           </ProtectedRoute>
         }
       />

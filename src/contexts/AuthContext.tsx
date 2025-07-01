@@ -53,6 +53,7 @@ interface AuthContextType extends AuthState {
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
+  updateUser: (user: User) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -164,12 +165,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
   }, []); // Empty dependency array to only run once
 
+  const updateUser = (user: User) => {
+    dispatch({ type: "SET_USER", payload: user });
+  };
+
   const value: AuthContextType = {
     ...state,
     login,
     register,
     logout,
     checkAuth,
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

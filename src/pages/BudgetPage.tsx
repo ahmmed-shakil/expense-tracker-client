@@ -229,7 +229,10 @@ export const BudgetPage: React.FC = () => {
         <div style={{ marginBottom: "24px" }}>
           <h1>Budget Management</h1>
 
-          <Row gutter={[16, 16]} style={{ marginTop: "32px", marginBottom: "32px" }}>
+          <Row
+            gutter={[16, 16]}
+            style={{ marginTop: "32px", marginBottom: "32px" }}
+          >
             <Col xs={24} sm={8}>
               <Card>
                 <Statistic

@@ -15,6 +15,7 @@
     "@types/react-router-dom": "^5.3.3",
     "antd": "^5.26.3",
     "axios": "^1.10.0",
+    "cloudinary-core": "^2.13.1",
     "dayjs": "^1.11.13",
     "echarts": "^5.6.0",
     "echarts-for-react": "^3.0.2",

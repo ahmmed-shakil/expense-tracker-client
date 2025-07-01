@@ -38,6 +38,7 @@ export const Navbar: React.FC = () => {
     { key: "/income", label: "Income", icon: <DollarOutlined /> },
     { key: "/budget", label: "Budget", icon: <WalletOutlined /> },
     { key: "/categories", label: "Categories", icon: <SettingOutlined /> },
+    { key: "/profile", label: "Profile", icon: <UserOutlined /> },
   ];
 
   const handleLogout = async () => {
@@ -108,7 +109,7 @@ export const Navbar: React.FC = () => {
             flex: 1,
             display: "flex",
             justifyContent: "center",
-            maxWidth: "600px",
+            maxWidth: "700px",
           }}
         >
           <Menu
@@ -123,7 +124,7 @@ export const Navbar: React.FC = () => {
             style={{
               border: "none",
               background: "transparent",
-              minWidth: "500px",
+              minWidth: "600px",
               justifyContent: "center",
             }}
           />
@@ -135,8 +136,11 @@ export const Navbar: React.FC = () => {
           style={{ minWidth: "120px", textAlign: "right" }}
         >
           <Space>
-            <Space>
-              <Avatar icon={<UserOutlined />} size="small" />
+            <Space
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/profile")}
+            >
+              <Avatar src={user?.avatar} icon={<UserOutlined />} size="small" />
               <Text className="user-name" style={{ fontSize: "14px" }}>
                 {user?.name}
               </Text>
@@ -176,10 +180,15 @@ export const Navbar: React.FC = () => {
             padding: "16px 0",
             borderBottom: "1px solid #f0f0f0",
             marginBottom: "16px",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            navigate("/profile");
+            setMobileMenuVisible(false);
           }}
         >
           <Space>
-            <Avatar icon={<UserOutlined />} />
+            <Avatar src={user?.avatar} icon={<UserOutlined />} />
             <div>
               <Text strong>{user?.name}</Text>
               <br />

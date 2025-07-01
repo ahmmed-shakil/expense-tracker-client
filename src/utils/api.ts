@@ -209,6 +209,7 @@ export const userApi = {
   updateProfile: async (data: {
     name: string;
     email: string;
+    avatar?: string;
   }): Promise<ApiResponse<User>> => {
     const response = await api.put("/user/profile", data);
     return response.data;
