@@ -81,8 +81,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       } else {
         dispatch({ type: "LOGOUT" });
       }
-    } catch (error) {
+    } catch (error: any) {
+      console.log("Auth check failed:", error.message);
       dispatch({ type: "LOGOUT" });
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false });
     }
   };
 
@@ -123,19 +126,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    checkAuth();
+    let mounted = true;
+
+    const performAuthCheck = async () => {
+      if (mounted) {
+        await checkAuth();
+      }
+    };
+
+    // Only check auth on initial mount
+    performAuthCheck();
 
     // Listen for automatic logout events from API interceptor
     const handleAutoLogout = () => {
-      dispatch({ type: "LOGOUT" });
+      console.log("Auto logout triggered");
+      if (mounted) {
+        dispatch({ type: "LOGOUT" });
+      }
     };
 
     window.addEventListener("auth:logout", handleAutoLogout);
 
     return () => {
+      mounted = false;
       window.removeEventListener("auth:logout", handleAutoLogout);
     };
-  }, []);
+  }, []); // Empty dependency array to only run once
 
   const value: AuthContextType = {
     ...state,

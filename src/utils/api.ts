@@ -23,6 +23,7 @@ const api = axios.create({
 
 // Flag to track if we're currently refreshing
 let isRefreshing = false;
+let isAuthInvalid = false; // Flag to track if auth is completely invalid
 let failedQueue: Array<{
   resolve: (value?: any) => void;
   reject: (reason?: any) => void;
@@ -62,6 +63,13 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // If auth is completely invalid, reject immediately
+    if (isAuthInvalid) {
+      return Promise.reject(
+        new Error("Authentication failed. Please login again.")
+      );
+    }
+
     // If error is 401 and we haven't already tried to refresh
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
@@ -82,20 +90,36 @@ api.interceptors.response.use(
 
       try {
         // Attempt to refresh the token
+        console.log("Making POST request to /auth/refresh");
         const response = await api.post("/auth/refresh");
 
         if (response.data.success) {
           processQueue(null, response.data.data.accessToken);
           return api(originalRequest);
+        } else {
+          throw new Error("Refresh failed");
         }
-      } catch (refreshError) {
-        // Refresh failed, clear tokens and redirect to login
+      } catch (refreshError: any) {
+        // Refresh failed, mark auth as invalid to prevent further attempts
+        isAuthInvalid = true;
+
+        console.log(
+          "Refresh token failed:",
+          refreshError.response?.data?.message || refreshError.message
+        );
         processQueue(refreshError, null);
 
-        // Import auth context to trigger logout
+        // Clear any stored auth state and trigger logout
+        localStorage.removeItem("user");
+        sessionStorage.removeItem("user");
+
+        // Dispatch logout event to notify AuthContext
         window.dispatchEvent(new CustomEvent("auth:logout"));
 
-        return Promise.reject(refreshError);
+        // Don't retry the original request, reject immediately
+        return Promise.reject(
+          new Error("Authentication failed. Please login again.")
+        );
       } finally {
         isRefreshing = false;
       }
@@ -108,11 +132,19 @@ api.interceptors.response.use(
 
 // Auth API
 export const authApi = {
+  // Reset auth state (call this before login)
+  resetAuthState: () => {
+    isAuthInvalid = false;
+    isRefreshing = false;
+    failedQueue = [];
+  },
+
   register: async (
     email: string,
     password: string,
     name: string
   ): Promise<AuthResponse> => {
+    authApi.resetAuthState(); // Reset auth state before register
     const response = await api.post("/auth/register", {
       email,
       password,
@@ -122,6 +154,7 @@ export const authApi = {
   },
 
   login: async (email: string, password: string): Promise<AuthResponse> => {
+    authApi.resetAuthState(); // Reset auth state before login
     const response = await api.post("/auth/login", { email, password });
     return response.data;
   },
