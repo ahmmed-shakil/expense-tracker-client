@@ -142,10 +142,13 @@ export const ProfilePage: React.FC = () => {
       const imageUrl = await uploadToCloudinary(file);
       setProfileImage(imageUrl);
 
+      // Get current form values to update profile with new image
+      const currentValues = profileForm.getFieldsValue();
+      
       // Update profile with new image
       await userApi.updateProfile({
-        name: user?.name || "",
-        email: user?.email || "",
+        name: currentValues.name || user?.name || "",
+        email: currentValues.email || user?.email || "",
         avatar: imageUrl,
       });
 
@@ -155,9 +158,20 @@ export const ProfilePage: React.FC = () => {
       }
 
       toast.success("Profile image updated successfully!");
-    } catch (error) {
-      toast.error("Failed to upload image");
+    } catch (error: any) {
       console.error("Image upload error:", error);
+      
+      // Handle specific validation errors
+      if (error.response?.data?.errors) {
+        const errors = error.response.data.errors;
+        errors.forEach((err: any) => {
+          toast.error(`Validation error: ${err.message}`);
+        });
+      } else if (error.response?.data?.message) {
+        toast.error(`Failed to update profile: ${error.response.data.message}`);
+      } else {
+        toast.error("Failed to upload image");
+      }
     } finally {
       setImageUploading(false);
     }
